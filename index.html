@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="graph-up.svg" type="image/icon type" />
+    <title>Algo Visualiser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Algorithm Visualiser</h1>
+    <div id="navbar">
+      <table table>
+        <tr>
+          <td><button class="button-b1" type="button">Bubble Sort</button></td>
+          <td>
+            <button class="button-b2" type="button">Selection Sort</button>
+          </td>
+          <td><button class="button-b3" type="button">Merge Sort</button></td>
+          <td><button class="button-b4">Insertion Sort</button></td>
+          <td><button class="button-b5">Quick Sort</button></td>
+          <td><button class="button-b6">Counting Sort</button></td>
+        </tr>
+      </table>
+    </div>
+    <div id="bars"></div>
+    <div id="sliders">
+      <div>
+        Interval:
+        <input type="range" name="Interval" id="interval" min="0" max="10" />
+      </div>
+      <div>
+        Size: <input type="range" name="size" id="size" min="0" value="5" max="10" />
+      </div>
+    </div><div id="refresh">
+ <a href="#" class=btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-refresh"></span> Refresh
+ </a></div> 
+    <script src="index.js"></script>
+  </body>
+</html>
