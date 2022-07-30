@@ -1,11 +1,28 @@
-const generateArray = (arr, height) => {
-  const standardHeight = 400;
-  arr.push(Math.floor(Math.random() * standardHeight));
+let q = 0;
+const arraySize = document.getElementById("ArraySize");
+const max_size = 100;
+const place = [];
+const height = 400;
+const generateRandomElement = (height) => {
+  return Math.floor(Math.random() * height);
+};
+const generateArray = (size, height) => {
+  let arr = new Array(size);
+  for (let i = 0; i < size; i++) arr[i] = generateRandomElement(height);
   return arr;
 };
-const createBars = (size, height) => {
+const addElementsToArray = (arr, height, bars, newsize) => {
+  console.log(arr.length, "Array length");
+  console.log(newsize, "New size");
+  const newArray = generateArray(Number(newsize - arr.length), height);
+  console.log(newArray);
+  let oldArrayLength = arr.length;
+  arr = arr.concat(newArray);
+  bars = createBars(Number(newsize - oldArrayLength), bars, newArray);
+  return arr;
+};
+const createBars = (size, bars, arr) => {
   for (let i = 0; i < size; i++) {
-    arr = generateArray(arr, height);
     const child = document.createElement("div");
     child.style.height = `${arr[i]}px`;
     child.style.width = `100%`;
@@ -14,13 +31,21 @@ const createBars = (size, height) => {
     child.classList.add("bar");
     bars.appendChild(child);
   }
+  return bars;
 };
 
 const removeBars = () => {
-  const child = document.getElementsByClassName("bar");
+  const child = Array.prototype.slice.call(
+    document.getElementsByClassName("bar")
+  );
+
+  for (var i = 0; i < child.length; i++) {
+    child[i].remove();
+  }
 };
 
 const changeColour = (child, flag) => {
+  console.log(child);
   if (!flag) child.style.background = `red`;
   else child.style.background = `#61dafb`;
 };
@@ -40,7 +65,7 @@ const animate = (i1, i2, k) => {
   setTimeout(() => changeColour(children[i2], 1), (k + 1) * 100);
 };
 
-function bubbleSort(array) {
+const bubbleSort = (array) => {
   let k = 0;
   for (let i = 0; i < array.length - 1; i++) {
     for (let j = 0; j < array.length - 1 - i; j++) {
@@ -54,9 +79,9 @@ function bubbleSort(array) {
     }
   }
   console.log(array);
-}
+};
 
-function selectionSort(array) {
+const selectionSort = (array) => {
   let k = 0;
   for (let i = 0; i < array.length - 1; i++) {
     let min = array[i];
@@ -75,10 +100,10 @@ function selectionSort(array) {
     }
     k++;
   }
-}
+};
 
 let c = 0;
-function changeHeightM(insert, left, right) {
+const changeHeightM = (insert, left, right) => {
   const children = document.getElementsByClassName("bar");
   for (let i = left; i <= right; i++) {
     setTimeout(() => {
@@ -88,18 +113,18 @@ function changeHeightM(insert, left, right) {
     setTimeout(() => changeColour(children[i], 1), (c + 1) * 100);
     c++;
   }
-}
-function animate_mergesort(t, k, i) {
+};
+const animate_mergesort = (t, k, i) => {
   const children = document.getElementsByClassName("bar");
   setTimeout(() => changeColour(children[k], 0), t * 100);
   setTimeout(() => changeColour(children[i], 0), t * 100);
-  setTimeout(() => drawBars(children[k], children[i]), t * 100);
+  // setTimeout(() => drawBars(children[k], children[i]), t * 100);
   setTimeout(() => changeColour(children[k], 1), (t + 1) * 100);
   setTimeout(() => changeColour(children[i], 1), (t + 1) * 100);
-}
+};
 let h = 0;
-function merger(array, left, mid, right) {
-  let inserted = [];
+const merger = (array, left, mid, right) => {
+  let inserted;
   let left_array = [];
   let right_array = [];
 
@@ -137,18 +162,18 @@ function merger(array, left, mid, right) {
   }
   for (let k = left; k <= right; k++) inserted.push(array[k]);
   changeHeightM(inserted, left, right);
-}
+};
 
-function mergeSorter(array, first, last) {
+const mergeSorter = (array, first, last) => {
   if (first >= last) return;
 
   let mid = Math.floor((last + first) / 2);
   mergeSorter(array, first, mid);
   mergeSorter(array, mid + 1, last);
   merger(array, first, mid, last);
-}
+};
 
-function insertionSort(array) {
+const insertionSort = (array) => {
   let t = 0;
   const children = document.getElementsByClassName("bar");
   for (let i = 1; i < array.length; i++) {
@@ -168,15 +193,8 @@ function insertionSort(array) {
     }
     array[j + 1] = key;
   }
-}
+};
 
-function quickSort(array, first, last) {
-  if (first >= last) return;
-  const p = partition(array, first, last);
-  quickSort(array, first, p - 1);
-  quickSort(array, p + 1, last);
-}
-let q = 0;
 const partition = (array, left, right) => {
   let randind = Math.floor(Math.random(right - left + 1)) + left;
   animate(right, randind, q);
@@ -198,8 +216,15 @@ const partition = (array, left, right) => {
   return j + 1;
 };
 
+const quickSort = (array, first, last) => {
+  if (first >= last) return;
+  const p = partition(array, first, last);
+  quickSort(array, first, p - 1);
+  quickSort(array, p + 1, last);
+};
+
 const countingsort = (array, range) => {
-  count = [];
+  let count = [];
   console.log(array);
   const children = document.getElementsByClassName("bar");
   for (let i = 0; i < range; i++) count.push(0);
@@ -210,7 +235,6 @@ const countingsort = (array, range) => {
   for (let i = 1; i < range; i++) {
     count[i] += count[i - 1];
   }
-  const place = [];
   for (let i = 0; i < array.length; i++) place.push(-1);
   for (let i = 0; i < array.length; i++) {
     let k = array[i];
@@ -223,43 +247,45 @@ const countingsort = (array, range) => {
     setTimeout(() => (children[count[k] - 1].style.height = `${k}px`), i * 100);
     setTimeout(() => changeColour(children[count[k] - 1], 1), (i + 1) * 100);
   }
-  console.log(place);
 };
 
-let arr = [];
-const max_size = 100;
 const size_slider = document.getElementById("size");
-createBars((size_slider.value / 10) * max_size + 10, 400);
-
-size_slider.addEventListener("change", removeBars);
 const bubblesort = document.getElementsByClassName("button-b1");
-
-bubblesort[0].addEventListener("click", () => bubbleSort(arr));
 const selectionsort = document.getElementsByClassName("button-b2");
-
-selectionsort[0].addEventListener("click", () => selectionSort(arr));
 const mergesort = document.getElementsByClassName("button-b3");
-
-mergesort[0].addEventListener("click", () => {
-  mergeSorter(arr, 0, size - 1);
-  console.log(arr);
-});
-
 const insertionsort = document.getElementsByClassName("button-b4");
-insertionsort[0].addEventListener("click", () => {
-  insertionSort(arr);
-  console.log(arr);
-});
-
 const quicksort = document.getElementsByClassName("button-b5");
-quicksort[0].addEventListener("click", () => {
-  quickSort(arr, 0, size - 1);
-  console.log(arr);
-});
-
 const countsort = document.getElementsByClassName("button-b6");
-countsort[0].addEventListener("click", () => countingsort(arr, height));
-
+const bars = document.getElementById("bars");
 const refresh = () => location.reload();
 const reload = document.getElementById("refresh");
 reload.addEventListener("click", refresh);
+
+function init() {
+  let size = (Number(size_slider.value) / 10) * max_size;
+  let arr = generateArray(size, height);
+  createBars(size, bars, arr);
+  bubblesort[0].addEventListener("click", () => bubbleSort(arr));
+  selectionsort[0].addEventListener("click", () => selectionSort(arr));
+  mergesort[0].addEventListener("click", () => {
+    mergeSorter(arr, 0, max_size - 1);
+    console.log(arr);
+  });
+  insertionsort[0].addEventListener("click", () => {
+    insertionSort(arr);
+    console.log(arr);
+  });
+  quicksort[0].addEventListener("click", () => {
+    quickSort(arr, 0, max_size - 1);
+    console.log(arr);
+  });
+  countsort[0].addEventListener("click", () => countingsort(arr, height));
+  size_slider.addEventListener("input", (e) => {
+    let new_size = (Number(e.target.value) / 10) * max_size;
+    if (new_size > size) {
+      console.log(e.target.value);
+      return (arr = addElementsToArray(arr, height, bars, new_size));
+    }
+  });
+}
+init();
