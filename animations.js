@@ -1,5 +1,4 @@
 const changeColour = (child, flag) => {
-  console.log(child);
   if (!flag) child.style.background = `red`;
   else child.style.background = `#61dafb`;
 };

@@ -6,6 +6,18 @@ import { insertionSort } from "./insertionsort.js";
 import { countingsort } from "./countingsort.js";
 const max_size = 500;
 const height = 400;
+const size_slider = document.getElementById("size");
+const bubblesort = document.getElementsByClassName("button-b1");
+const selectionsort = document.getElementsByClassName("button-b2");
+const mergesort = document.getElementsByClassName("button-b3");
+const insertionsort = document.getElementsByClassName("button-b4");
+const quicksort = document.getElementsByClassName("button-b5");
+const countsort = document.getElementsByClassName("button-b6");
+const bars = document.getElementById("bars");
+const refresh = () => location.reload();
+const reload = document.getElementById("refresh");
+reload.addEventListener("click", refresh);
+const interval_slider = document.getElementById("interval");
 
 const generateRandomElement = (height) => {
   return Math.floor(Math.random() * height);
@@ -53,22 +65,10 @@ const createBars = (size, bars, arr) => {
   return bars;
 };
 
-const size_slider = document.getElementById("size");
-const bubblesort = document.getElementsByClassName("button-b1");
-const selectionsort = document.getElementsByClassName("button-b2");
-const mergesort = document.getElementsByClassName("button-b3");
-const insertionsort = document.getElementsByClassName("button-b4");
-const quicksort = document.getElementsByClassName("button-b5");
-const countsort = document.getElementsByClassName("button-b6");
-const bars = document.getElementById("bars");
-const refresh = () => location.reload();
-const reload = document.getElementById("refresh");
-reload.addEventListener("click", refresh);
-const interval_slider = document.getElementById("interval");
 function init() {
   let size = (Number(size_slider.value) / 100) * max_size;
   let arr = generateArray(size, height);
-  let time = Number(interval_slider.value) * 100;
+  let time = Number(interval_slider.value / 100) * 1000;
   createBars(size, bars, arr);
   bubblesort[0].addEventListener("click", () => bubbleSort(arr, time));
   selectionsort[0].addEventListener("click", () => selectionSort(arr, time));
@@ -96,7 +96,7 @@ function init() {
     }
   });
   interval_slider.addEventListener("input", (e) => {
-    time = Number(e.target.value * 10);
+    time = Number((e.target.value / 100) * 1000);
   });
 }
 init();
